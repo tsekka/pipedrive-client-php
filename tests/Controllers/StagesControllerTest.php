@@ -47,12 +47,15 @@ class StagesControllerTest extends \PHPUnit_Framework_TestCase
     public function testTestGetAllStages()
     {
         // Parameters for the API call
-        $pipelineId = null;
+        $input = array();
+        $input['pipelineId'] = null;
+        $input['start'] = 0;
+        $input['limit'] = null;
 
         // Set callback and perform API call
         self::$controller->setHttpCallBack($this->httpResponse);
         try {
-            self::$controller->getAllStages($pipelineId);
+            self::$controller->getAllStages($input);
         } catch (APIException $e) {
         }
 

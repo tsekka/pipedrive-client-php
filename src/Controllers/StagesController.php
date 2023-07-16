@@ -100,13 +100,16 @@ class StagesController extends BaseController
     /**
      * Returns data about all stages
      *
-     * @param integer $pipelineId  (optional) ID of the pipeline to fetch stages for. If omitted, stages for all
-     *                             pipelines will be fetched.
+     * @param  array  $options                Array with all options for search
+     * @param integer $options['pipelineId']  (optional) ID of the pipeline to fetch stages for. If omitted, stages 
+     *                                        for all pipelines will be fetched.
+     * @param integer $options['start']       (optional) Pagination start
+     * @param integer $options['limit']       (optional) Items shown per page
      * @return \Pipedrive\Utils\JsonSerializer response from the API call
      * @throws APIException Thrown if API call fails
      */
     public function getAllStages(
-        $pipelineId = null
+        $options
     ) {
         //check or get oauth token
         OAuthManager::getInstance()->checkAuthorization();
@@ -116,7 +119,9 @@ class StagesController extends BaseController
 
         //process optional query parameters
         APIHelper::appendUrlWithQueryParameters($_queryBuilder, array (
-            'pipeline_id' => $pipelineId,
+            'pipeline_id' => $this->val($options, 'pipelineId'),
+            'start' => $this->val($options, 'start', 0),
+            'limit' => $this->val($options, 'limit'),
         ));
 
         //validate and preprocess url
